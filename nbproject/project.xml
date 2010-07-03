@@ -6,7 +6,9 @@
             <name>VoiceFX-Calculator</name>
             <minimum-ant-version>1.6.5</minimum-ant-version>
             <source-roots>
-                <root id="src.dir"/>
+                <root id="src.pre-src.dir"/>
+                <root id="src.main.dir"/>
+                <root id="src.post-src.dir"/>
             </source-roots>
             <test-roots/>
         </data>

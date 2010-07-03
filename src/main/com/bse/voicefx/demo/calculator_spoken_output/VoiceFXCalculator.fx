@@ -8,13 +8,13 @@
  * as (a rewrite of James L. Weaver's original example)
  * to demonstrate creating applications using JavaFX SDK 1.0
  */
-package com.bse.voicefx.demo.calculator;
+package com.bse.voicefx.demo.calculator_spoken_output;
 
-import com.bse.voicefx.demo.calculator.CalculatorModel;
+import com.bse.voicefx.demo.calculator_spoken_output.CalculatorModel;
 import com.bse.voicefx.demo.common.CalculatorDisplay;
 import com.bse.voicefx.demo.common.CalculatorKey;
+import com.bse.voicefx.SpeechRecognizer;
 import com.bse.voicefx.SpeechSynthesizer;
-
 import javafx.scene.paint.Color;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -23,15 +23,18 @@ import org.jfxtras.scene.layout.Grid;
 import org.jfxtras.scene.layout.Row;
 
 // The Speech Synthesizer
-var speechSynthesizer = new SpeechSynthesizer();
+var synth = new SpeechSynthesizer();
+var recog = new SpeechRecognizer("VoiceFX-3-Calculator-Grammar-Creation");
 
 /**
  * The "stage" for the application
  */
 Stage {
+
     // The model
     def model = CalculatorModel {
-        synthesizer: speechSynthesizer;
+      speechSynthesizer: synth
+      speechRecognizer: recog
     }
     def columns = 4
     def keyPositionMap = [

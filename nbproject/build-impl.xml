@@ -142,7 +142,7 @@ is divided into following sections:
     <target depends="init,deps-jar,-pre-compile" name="-do-compile">
         <exec executable="${platform.fxhome}/bin/javafxpackager${binary.extension}" failonerror="true">
             <arg value="-src"/>
-            <arg value="${src.dir}"/>
+            <arg value="${src.pre-src.dir};${src.main.dir};${src.post-src.dir}"/>
             <arg value="-workdir"/>
             <arg file="${build.dir}"/>
             <arg value="-d"/>

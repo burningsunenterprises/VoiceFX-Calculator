@@ -66,4 +66,67 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <target depends="init,deps-jar" name="-prunk-compile">
+        <exec executable="${platform.fxhome}/bin/javafxpackager${binary.extension}" failonerror="true">
+            <arg value="-src"/>
+            <arg value="pre-src"/>
+            <arg value="-workdir"/>
+            <arg file="${build.dir}"/>
+            <arg value="-d"/>
+            <arg file="${dist.dir}"/>
+            <arg value="-appname"/>
+            <arg value="${application.title}"/>
+            <arg value="-appvendor"/>
+            <arg value="${application.vendor}"/>
+            <arg value="-appwidth"/>
+            <arg value="${applet.width}"/>
+            <arg value="-appheight"/>
+            <arg value="${applet.height}"/>
+            <arg value="-appclass"/>
+            <arg value="${main.class}"/>
+            <arg line="${codebase.arg}"/>
+            <arg value="-encoding"/>
+            <arg value="${source.encoding}"/>
+            <arg value="-p"/>
+            <arg value="${javafx.profile}"/>
+            <arg value="${verbose.arg}"/>
+            <arg value="${draggable.arg}"/>
+            <arg value="${pack200.arg}"/>
+            <arg value="${sign.arg}"/>
+            <arg value="-cp"/>
+            <arg path="${javac.classpath}"/>
+        </exec>
+    </target>
+    <target depends="init,deps-jar" name="-pork-compile">
+        <exec executable="${platform.fxhome}/bin/javafxpackager${binary.extension}" failonerror="true">
+            <arg value="-src"/>
+            <arg value="post-src"/>
+            <arg value="-workdir"/>
+            <arg file="${build.dir}"/>
+            <arg value="-d"/>
+            <arg file="${dist.dir}"/>
+            <arg value="-appname"/>
+            <arg value="${application.title}"/>
+            <arg value="-appvendor"/>
+            <arg value="${application.vendor}"/>
+            <arg value="-appwidth"/>
+            <arg value="${applet.width}"/>
+            <arg value="-appheight"/>
+            <arg value="${applet.height}"/>
+            <arg value="-appclass"/>
+            <arg value="${main.class}"/>
+            <arg line="${codebase.arg}"/>
+            <arg value="-encoding"/>
+            <arg value="${source.encoding}"/>
+            <arg value="-p"/>
+            <arg value="${javafx.profile}"/>
+            <arg value="${verbose.arg}"/>
+            <arg value="${draggable.arg}"/>
+            <arg value="${pack200.arg}"/>
+            <arg value="${sign.arg}"/>
+            <arg value="-cp"/>
+            <arg path="${javac.classpath}"/>
+        </exec>
+    </target>
+
 </project>

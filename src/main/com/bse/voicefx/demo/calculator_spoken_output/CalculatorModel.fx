@@ -1,5 +1,5 @@
 /*
- * VoiceFxCalculator-2.fx
+ * VoiceFxCalculator-1.fx
  *
  * Derived from SimpleCalc3 application by Dean Iverson as published on the
  * JavaFXpert blog in 2008
@@ -14,9 +14,10 @@
  * Created on Dec 30, 2008, 5:56:49 PM
  */
 
-package com.bse.voicefx.demo.calculator;
+package com.bse.voicefx.demo.calculator_spoken_output;
 
-import com.bse.voicefx.demo.calculator.CalculatorModel.KeyModel;
+import com.bse.voicefx.demo.calculator_spoken_output.CalculatorModel.KeyModel;
+import com.bse.voicefx.SpeechRecognizer;
 import com.bse.voicefx.SpeechSynthesizer;
 import java.lang.Double;
 import javafx.lang.FX;
@@ -28,10 +29,14 @@ public class KeyModel {
     public-init var character: String;
     public-init var description: String;
     public-init var action: function():Void;
+    public function invoke_action() {
+        action
+    }
 }
 
 public class CalculatorModel {
-    public-init var synthesizer: SpeechSynthesizer;
+    public-init var speechSynthesizer: SpeechSynthesizer;
+    public-init var speechRecognizer: SpeechRecognizer;
 
     public-init var displayLength = 9;
     public-read var display = "0" on replace {
@@ -41,26 +46,26 @@ public class CalculatorModel {
     }
 
     public-read var keys = [
-        createCharacterKey( "0", "0" ),
-        createCharacterKey( "1", "1" ),
-        createCharacterKey( "2", "2" ),
-        createCharacterKey( "3", "3" ),
-        createCharacterKey( "4", "4" ),
-        createCharacterKey( "5", "5" ),
-        createCharacterKey( "6", "6" ),
-        createCharacterKey( "7", "7" ),
-        createCharacterKey( "8", "8" ),
-        createCharacterKey( "9", "9" ),
-        createOperatorKey( "+", "plus", add ),
-        createOperatorKey( "-", "minus", subtract ),
-        createOperatorKey( "x", "times", multiply ),
-        createOperatorKey( "\u00f7", "divide by", divide ),
-        createCharacterKey( ".", "point" ),
-        createResultOperatorKey("=","equals", equals, true),
-        createImmediateOperatorKey("C", "clear", clear, true),
-        createImmediateOperatorKey("\u2190", "backup", backup, false),
-        createSpecialOperatorKey("\u266a", "speak", speak, false),
-        createImmediateOperatorKey("Off", "off", off, false)
+        createCharacterKey( "0", ["zero","zed"] ),
+        createCharacterKey( "1", ["one", "wuh"] ),
+        createCharacterKey( "2", ["two"] ),
+        createCharacterKey( "3", ["three"] ),
+        createCharacterKey( "4", ["four", "fo"] ),
+        createCharacterKey( "5", ["five"] ),
+        createCharacterKey( "6", ["six", "sick"] ),
+        createCharacterKey( "7", ["seven","sevum"] ),
+        createCharacterKey( "8", ["eight"] ),
+        createCharacterKey( "9", ["nine"] ),
+        createOperatorKey( "+", ["plus","add"], add ),
+        createOperatorKey( "-", ["minus","less","subtract","sub"], subtract ),
+        createOperatorKey( "x", ["times","multiply","mult"], multiply ),
+        createOperatorKey( "\u00f7", ["divide","divide by","divided","divided by"], divide ),
+        createCharacterKey( ".", ["point","decimal"] ),
+        createResultOperatorKey("=",["equals","equal","is"], equals, true),
+        createImmediateOperatorKey("C", ["clear","erase"], clear, true),
+        createImmediateOperatorKey("\u2190", ["backup","delete"], backup, false),
+        createSpecialOperatorKey("\u266a", ["speak","tell me"], speak, false),
+        createImmediateOperatorKey("Off", ["off","close"], off, false)
     ];
 
     var register = 0.0;
@@ -72,63 +77,73 @@ public class CalculatorModel {
            display = "{display}{character}";
     }
 
-    function createCharacterKey( character: String, description: String ) {
-        KeyModel {
+    function createCharacterKey( character: String, description: String[] ) {
+          var km = KeyModel {
             character: character
-            description: description
+            description: description[0]
             action: function() {
                 if (clearDisplayOnNextCharacter) {
                     display = "";
                     clearDisplayOnNextCharacter = false;
                 }
                 appendToDisplay( character );
-                synthesizer.speak( description );
+                speechSynthesizer.speak( description[0] );
             }
         }
+        speechRecognizer.recognize_me( km, "invoke-action", description);
+        return km;
     }
 
-    function createOperatorKey( character:String, description:String, nextOp:function() ) {
-        KeyModel {
+    function createOperatorKey( character:String, description:String[], nextOp:function() ) {
+        var km = KeyModel {
             character: character
-            description: description
+            description: description[0]
             action: function() {
-                synthesizer.speak(description);
+                speechSynthesizer.speak(description[0]);
                 performOp( nextOp );
             }
         }
+        speechRecognizer.recognize_me( km, "invoke-action", description);
+        return km;
     }
 
-    function createImmediateOperatorKey( character:String, description:String, nextOp:function(), clear:Boolean ) {
-        KeyModel {
+    function createImmediateOperatorKey( character:String, description:String[], nextOp:function(), clear:Boolean ) {
+        var km = KeyModel {
             character: character
-            description: description
+            description: description[0]
             action: function() {
-                synthesizer.speak(description);
+                speechSynthesizer.speak(description[0]);
                 performImmediateOp( nextOp, clear );
             }
         }
+        speechRecognizer.recognize_me( km, "invoke-action", description);
+        return km;
     }
 
-    function createResultOperatorKey( character:String, description:String, nextOp:function(), clear:Boolean ) {
-        KeyModel {
+    function createResultOperatorKey( character:String, description:String[], nextOp:function(), clear:Boolean ) {
+        var km = KeyModel {
             character: character
-            description: description
+            description: description[0]
             action: function() {
-                synthesizer.speak(description);
+                speechSynthesizer.speak(description[0]);
                 performImmediateOp( nextOp, clear );
                 speak();
             }
         }
+        speechRecognizer.recognize_me( km, "invoke-action", description);
+        return km;
     }
 
-    function createSpecialOperatorKey( character:String, description: String, nextOp:function(), clear:Boolean ) {
-        KeyModel {
+    function createSpecialOperatorKey( character:String, description: String[], nextOp:function(), clear:Boolean ) {
+        var km = KeyModel {
             character: character
-            description: description
+            description: description[0]
             action: function() {
-                synthesizer.speak( display );
+                speechSynthesizer.speak( display );
             }
         }
+        speechRecognizer.recognize_me( km, "invoke-action", description);
+        return km;
     }
 
     function performOp( nextOp: function() ) {
@@ -182,16 +197,17 @@ public class CalculatorModel {
 
     function speak(): Void {
       if (display.startsWith("-")) {
-        synthesizer.speak("negative");
-        synthesizer.speak( display.substring(1));
+        speechSynthesizer.speak("negative");
+        speechSynthesizer.speak( display.substring(1));
       }
       else {
-        synthesizer.speak( display );
+        speechSynthesizer.speak( display );
       }
     }
 
     function off(): Void {
-        synthesizer.stop();
+        speechRecognizer.stop();
+        speechSynthesizer.stop();
         FX.exit();
     }
 
