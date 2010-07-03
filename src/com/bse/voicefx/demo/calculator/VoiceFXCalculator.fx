@@ -13,6 +13,8 @@ package com.bse.voicefx.demo.calculator;
 import com.bse.voicefx.demo.calculator.CalculatorModel;
 import com.bse.voicefx.demo.common.CalculatorDisplay;
 import com.bse.voicefx.demo.common.CalculatorKey;
+import com.bse.voicefx.SpeechSynthesizer;
+
 import javafx.scene.paint.Color;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -20,12 +22,17 @@ import org.jfxtras.scene.layout.Cell;
 import org.jfxtras.scene.layout.Grid;
 import org.jfxtras.scene.layout.Row;
 
+// The Speech Synthesizer
+var speechSynthesizer = new SpeechSynthesizer();
+
 /**
  * The "stage" for the application
  */
 Stage {
     // The model
-    def model = CalculatorModel {}
+    def model = CalculatorModel {
+        synthesizer: speechSynthesizer;
+    }
     def columns = 4
     def keyPositionMap = [
         16, 17, 18, 19

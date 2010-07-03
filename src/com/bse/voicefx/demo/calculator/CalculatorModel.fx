@@ -16,6 +16,8 @@
 
 package com.bse.voicefx.demo.calculator;
 
+import com.bse.voicefx.demo.calculator.CalculatorModel.KeyModel;
+import com.bse.voicefx.SpeechSynthesizer;
 import java.lang.Double;
 import javafx.lang.FX;
 
@@ -29,11 +31,13 @@ public class KeyModel {
 }
 
 public class CalculatorModel {
+    public-init var synthesizer: SpeechSynthesizer;
     public-init var displayLength = 9;
     public-read var display = "0" on replace {
         if( display.length() >= displayLength ) {
             display = display.substring(0, displayLength);
         }
+        synthesizer.speak(display);
     }
 
     public-read var keys = [
