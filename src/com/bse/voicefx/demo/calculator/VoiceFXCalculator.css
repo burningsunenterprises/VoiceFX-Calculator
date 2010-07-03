@@ -1,0 +1,47 @@
+/*
+ * VoiceFxCalculator-1.fx
+ *
+ * Derived from SimpleCalc3 application by Dean Iverson as published on the
+ * JavaFXpert blog in 2008
+ *
+ * Large portions of code were Developed in 2008 by Dean Iverson
+ * as (a rewrite of James L. Weaver's original example)
+ * to demonstrate creating applications using JavaFX SDK 1.0
+ */
+/* 
+    Document   : simpleCalc3
+    Created on : Jan 13, 2009, 4:05:36 PM
+    Author     : dean
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+CalculatorDisplay {
+    textColor: black;
+    displayColor: #d5d9b8;
+}
+
+.calculatorKey {
+    keyColor: black;
+    characterColor: white;
+}
+
+#equals {
+    keyColor: orange;
+    characterColor: black;
+}
+
+#plus, #minus, #multiply, #divide {
+    keyColor: brown;
+}
+
+Scene {
+    fill: linear (0%, 0%) to (0%, 100%) stops (0.00, #1a1a1a),
+        (0.25, #1d1d1d), (0.27, #222222),  (0.66, #0d0d0d),
+        (1.0, #000000);
+}

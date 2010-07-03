@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="http://localhost:8083/servlet/org.netbeans.modules.javafx.project.JnlpDownloadServlet/D%3A/Research/JavaOneCode/VoiceFX/VoiceFX-1-Calculator/dist/" href="JavaFXApplication1.jnlp">
+    <information>
+        <title>JavaFXApplication1</title>
+        <vendor>n1088802</vendor>
+        <homepage href="http://localhost:8083/servlet/org.netbeans.modules.javafx.project.JnlpDownloadServlet/D%3A/Research/JavaOneCode/VoiceFX/VoiceFX-1-Calculator/dist/"/>
+        <description>JavaFXApplication1</description>
+        <offline-allowed/>
+        <shortcut>
+            <desktop/>
+        </shortcut>
+    </information>
+    <resources>
+        <j2se version="1.5+"/>
+        <extension name="JavaFX Runtime" href="http://dl.javafx.com/1.1/javafx-rt.jnlp"/>
+        <jar href="JavaFXApplication1.jar" main="true"/>
+        <jar href="lib/JFXtras-0.4.jar"/>
+    </resources>
+    <application-desc main-class="com.bse.voicefx.demo.calculator.VoiceFXCalculator">
+    </application-desc>
+</jnlp>
