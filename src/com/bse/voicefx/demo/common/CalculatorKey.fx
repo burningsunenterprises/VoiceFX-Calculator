@@ -34,6 +34,7 @@ public class CalculatorKey extends CustomNode {
     public var keyColor = Color.BLACK;
     public var characterColor = Color.YELLOW;
     public-init var character: String;
+    public-init var description: String;
     public-init var action: function();
 
     var baseKeyColor = keyColor;
@@ -96,6 +97,7 @@ public class CalculatorKey extends CustomNode {
                 onMousePressed: function( me:MouseEvent ) {
                     keyFade.playFromStart();
                     action();
+
                 }
             }
             def t:Text = Text {

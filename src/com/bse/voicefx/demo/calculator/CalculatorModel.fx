@@ -1,5 +1,5 @@
 /*
- * VoiceFxCalculator-1.fx
+ * VoiceFxCalculator-2.fx
  *
  * Derived from SimpleCalc3 application by Dean Iverson as published on the
  * JavaFXpert blog in 2008
@@ -32,34 +32,34 @@ public class KeyModel {
 
 public class CalculatorModel {
     public-init var synthesizer: SpeechSynthesizer;
+
     public-init var displayLength = 9;
     public-read var display = "0" on replace {
         if( display.length() >= displayLength ) {
             display = display.substring(0, displayLength);
         }
-        synthesizer.speak(display);
     }
 
     public-read var keys = [
-        createCharacterKey( "0" ),
-        createCharacterKey( "1" ),
-        createCharacterKey( "2" ),
-        createCharacterKey( "3" ),
-        createCharacterKey( "4" ),
-        createCharacterKey( "5" ),
-        createCharacterKey( "6" ),
-        createCharacterKey( "7" ),
-        createCharacterKey( "8" ),
-        createCharacterKey( "9" ),
+        createCharacterKey( "0", "0" ),
+        createCharacterKey( "1", "1" ),
+        createCharacterKey( "2", "2" ),
+        createCharacterKey( "3", "3" ),
+        createCharacterKey( "4", "4" ),
+        createCharacterKey( "5", "5" ),
+        createCharacterKey( "6", "6" ),
+        createCharacterKey( "7", "7" ),
+        createCharacterKey( "8", "8" ),
+        createCharacterKey( "9", "9" ),
         createOperatorKey( "+", "plus", add ),
         createOperatorKey( "-", "minus", subtract ),
-        createOperatorKey( "x", "multiply", multiply ),
-        createOperatorKey( "\u00f7", "divide", divide ),
-        createCharacterKey( "." ),
-        createImmediateOperatorKey("=","equals",equals,true),
+        createOperatorKey( "x", "times", multiply ),
+        createOperatorKey( "\u00f7", "divide by", divide ),
+        createCharacterKey( ".", "point" ),
+        createResultOperatorKey("=","equals", equals, true),
         createImmediateOperatorKey("C", "clear", clear, true),
-        createImmediateOperatorKey("<-", "backup", backup, false),
-        createImmediateOperatorKey("", "no op", no_op, false),
+        createImmediateOperatorKey("\u2190", "backup", backup, false),
+        createSpecialOperatorKey("\u266a", "speak", speak, false),
         createImmediateOperatorKey("Off", "off", off, false)
     ];
 
@@ -72,16 +72,17 @@ public class CalculatorModel {
            display = "{display}{character}";
     }
 
-    function createCharacterKey( character: String ) {
+    function createCharacterKey( character: String, description: String ) {
         KeyModel {
             character: character
-            description: character
+            description: description
             action: function() {
                 if (clearDisplayOnNextCharacter) {
                     display = "";
                     clearDisplayOnNextCharacter = false;
                 }
                 appendToDisplay( character );
+                synthesizer.speak( description );
             }
         }
     }
@@ -91,6 +92,7 @@ public class CalculatorModel {
             character: character
             description: description
             action: function() {
+                synthesizer.speak(description);
                 performOp( nextOp );
             }
         }
@@ -101,7 +103,30 @@ public class CalculatorModel {
             character: character
             description: description
             action: function() {
+                synthesizer.speak(description);
                 performImmediateOp( nextOp, clear );
+            }
+        }
+    }
+
+    function createResultOperatorKey( character:String, description:String, nextOp:function(), clear:Boolean ) {
+        KeyModel {
+            character: character
+            description: description
+            action: function() {
+                synthesizer.speak(description);
+                performImmediateOp( nextOp, clear );
+                speak();
+            }
+        }
+    }
+
+    function createSpecialOperatorKey( character:String, description: String, nextOp:function(), clear:Boolean ) {
+        KeyModel {
+            character: character
+            description: description
+            action: function() {
+                synthesizer.speak( display );
             }
         }
     }
@@ -155,11 +180,18 @@ public class CalculatorModel {
         clearDisplayOnNextCharacter = display.equalsIgnoreCase("0");
     }
 
-    function no_op(): Void {
-
+    function speak(): Void {
+      if (display.startsWith("-")) {
+        synthesizer.speak("negative");
+        synthesizer.speak( display.substring(1));
+      }
+      else {
+        synthesizer.speak( display );
+      }
     }
 
     function off(): Void {
+        synthesizer.stop();
         FX.exit();
     }
 

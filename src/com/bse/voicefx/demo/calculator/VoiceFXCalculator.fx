@@ -77,6 +77,7 @@ Stage {
                                 i * columns + j];
                                 var keyModel = model.keys[keyIndex];
                                 character: keyModel.character
+                                description: keyModel.description
                                 action: keyModel.action
                                 styleClass: "calculatorKey"
                                 id: keyModel.description
